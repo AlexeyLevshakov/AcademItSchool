@@ -43,7 +43,7 @@ public class Main {
         System.out.println(vector5);
 
         System.out.println("Разворот");
-        vector5.rotate360degree();
+        vector5.rotate180degree();
         System.out.println(vector5);
 
         System.out.println("Получение длины вектора");

@@ -6,13 +6,11 @@ public class Vector {
     private double[] components;
 
     public Vector(int n) throws IllegalArgumentException {
-        if (n <= 0) throw new IllegalArgumentException("Переданный конструктору аргумент должен быть положительным");
+        if (n <= 0) {
+            throw new IllegalArgumentException("Переданный конструктору аргумент должен быть положительным");
+        }
 
         this.components = new double[n];
-
-        for (int i = 0; i < n; i++) {
-            components[i] = 0;
-        }
     }
 
     public Vector(Vector vector) {
@@ -22,13 +20,19 @@ public class Vector {
     }
 
     public Vector(double[] array) {
+        if (array.length == 0) {
+            throw new IllegalArgumentException("Переданный конструктору массив должен быть ненулевой длины");
+        }
+
         this.components = new double[array.length];
 
         System.arraycopy(array, 0, components, 0, array.length);
     }
 
     public Vector(int n, double[] array) {
-        if (n <= 0) throw new IllegalArgumentException("Переданный конструктору аргумент должен быть положительным");
+        if (n <= 0) {
+            throw new IllegalArgumentException("Переданный конструктору аргумент должен быть положительным");
+        }
 
         this.components = new double[n];
 
@@ -63,26 +67,24 @@ public class Vector {
 
     public void addVector(Vector vector) {
         for (int i = 0; i < this.components.length; i++) {
-            this.components[i] = this.components[i] + vector.components[i];
+            this.components[i] += vector.components[i];
         }
     }
 
     public void subtractVector(Vector vector) {
         for (int i = 0; i < this.components.length; i++) {
-            this.components[i] = this.components[i] - vector.components[i];
+            this.components[i] -= vector.components[i];
         }
     }
 
     public void multiplyByScalar(double scalar) {
         for (int i = 0; i < this.components.length; i++) {
-            this.components[i] = this.components[i] * scalar;
+            this.components[i] *= scalar;
         }
     }
 
-    public void rotate360degree() {
-        for (int i = 0; i < this.components.length; i++) {
-            this.components[i] = this.components[i] * (-1);
-        }
+    public void rotate180degree() {
+        this.multiplyByScalar(-1);
     }
 
     public double getLength() {
@@ -114,7 +116,7 @@ public class Vector {
 
         Vector vector = (Vector) object;
 
-        if (this.getSize() != ((Vector) object).getSize()) {
+        if (this.getSize() != vector.getSize()) {
             return false;
         }
 
@@ -193,22 +195,20 @@ public class Vector {
     }
 
     public static double getScalarProductOfVectors(Vector vector1, Vector vector2) {
+        int minVectorSize;
+
         if (vector1.getSize() >= vector2.getSize()) {
-            double scalarProductOfVectors = 0;
-
-            for (int i = 0; i < vector2.getSize(); i++) {
-                scalarProductOfVectors += vector1.components[i] * vector2.components[i];
-            }
-
-            return scalarProductOfVectors;
+            minVectorSize = vector2.getSize();
         } else {
-            double scalarProductOfVectors = 0;
-
-            for (int i = 0; i < vector1.getSize(); i++) {
-                scalarProductOfVectors += vector1.components[i] * vector2.components[i];
-            }
-
-            return scalarProductOfVectors;
+            minVectorSize = vector1.getSize();
         }
+
+        double scalarProductOfVectors = 0;
+
+        for (int i = 0; i < minVectorSize; i++) {
+            scalarProductOfVectors += vector1.components[i] * vector2.components[i];
+        }
+
+        return scalarProductOfVectors;
     }
 }
