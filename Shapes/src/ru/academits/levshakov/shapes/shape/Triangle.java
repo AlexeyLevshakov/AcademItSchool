@@ -29,7 +29,7 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        return 0.5 * ((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3));
+        return 0.5 * Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Triangle implements Shape {
 
     @Override
     public String toString() {
-        return "(" + Double.toString(x1) + ", " + Double.toString(y1) + "), " +
+        return "Треугольник с вершинами по координатам: " + "(" + Double.toString(x1) + ", " + Double.toString(y1) + "), " +
                 "(" + Double.toString(x2) + ", " + Double.toString(y2) + "), " +
                 "(" + Double.toString(x3) + ", " + Double.toString(y3) + ")";
     }
