@@ -31,10 +31,10 @@ public class Main {
         System.out.println(vector5);
 
         System.out.println("Сложение");
-        vector5.addVector(vector2);
+        vector5.addVector(vector4);
         System.out.println(vector5);
 
-        System.out.println("Вычитание");
+       /* System.out.println("Вычитание");
         vector5.subtractVector(vector2);
         System.out.println(vector5);
 
@@ -43,7 +43,7 @@ public class Main {
         System.out.println(vector5);
 
         System.out.println("Разворот");
-        vector5.rotate180degree();
+        vector5.rotate180degrees();
         System.out.println(vector5);
 
         System.out.println("Получение длины вектора");
@@ -82,6 +82,6 @@ public class Main {
         System.out.println(Vector.getVectorDifference(vector6, vector2));
 
         System.out.println("Скалярное произведение");
-        System.out.println(Vector.getScalarProductOfVectors(vector6, vector2));
+        System.out.println(Vector.getScalarProductOfVectors(vector6, vector2)); */
     }
 }
