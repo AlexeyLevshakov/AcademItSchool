@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Vector {
     private double[] components;
 
-    public Vector(int n) throws IllegalArgumentException {
+    public Vector(int n) {
         if (n <= 0) {
             throw new IllegalArgumentException("Переданный конструктору аргумент должен быть положительным");
         }
@@ -14,9 +14,7 @@ public class Vector {
     }
 
     public Vector(Vector vector) {
-        this.components = new double[vector.components.length];
-
-        System.arraycopy(vector.components, 0, this.components, 0, vector.components.length);
+        this.components = Arrays.copyOf(vector.components, vector.components.length);
     }
 
     public Vector(double[] array) {
@@ -24,9 +22,7 @@ public class Vector {
             throw new IllegalArgumentException("Переданный конструктору массив должен быть ненулевой длины");
         }
 
-        this.components = new double[array.length];
-
-        System.arraycopy(array, 0, components, 0, array.length);
+        this.components = Arrays.copyOf(array, array.length);
     }
 
     public Vector(int n, double[] array) {
@@ -34,17 +30,7 @@ public class Vector {
             throw new IllegalArgumentException("Переданный конструктору аргумент должен быть положительным");
         }
 
-        this.components = new double[n];
-
-        if (n <= array.length) {
-            System.arraycopy(array, 0, components, 0, n);
-        } else {
-            System.arraycopy(array, 0, components, 0, array.length);
-
-            for (int i = array.length; i < n; i++) {
-                components[i] = 0;
-            }
-        }
+        this.components = Arrays.copyOf(array, n);
     }
 
     public int getSize() {
@@ -66,14 +52,40 @@ public class Vector {
     }
 
     public void addVector(Vector vector) {
-        for (int i = 0; i < this.components.length; i++) {
-            this.components[i] += vector.components[i];
+        if (this.getSize() >= vector.getSize()) {
+            for (int i = 0; i < vector.getSize(); i++) {
+                this.components[i] += vector.components[i];
+            }
+        } else {
+            double[] newComponents = new double[vector.getSize()];
+
+            for (int i = 0; i < this.getSize(); i++) {
+                newComponents[i] = this.components[i] + vector.components[i];
+            }
+
+            newComponents = Arrays.copyOfRange(vector.components, this.getSize(), vector.getSize() - 1);
+
+            this.components = newComponents;
         }
     }
 
     public void subtractVector(Vector vector) {
-        for (int i = 0; i < this.components.length; i++) {
-            this.components[i] -= vector.components[i];
+        if (this.getSize() >= vector.getSize()) {
+            for (int i = 0; i < vector.getSize(); i++) {
+                this.components[i] -= vector.components[i];
+            }
+        } else {
+            double[] newComponents = new double[vector.getSize()];
+
+            for (int i = 0; i < this.getSize(); i++) {
+                newComponents[i] = this.components[i] - vector.components[i];
+            }
+
+            for (int i = this.getSize(); i < vector.getSize(); i++) {
+                newComponents[i] = -vector.components[i];
+            }
+
+            this.components = newComponents;
         }
     }
 
@@ -83,7 +95,7 @@ public class Vector {
         }
     }
 
-    public void rotate180degree() {
+    public void rotate180degrees() {
         this.multiplyByScalar(-1);
     }
 
@@ -139,59 +151,15 @@ public class Vector {
     }
 
     public static Vector getVectorsSum(Vector vector1, Vector vector2) {
-        if (vector1.getSize() >= vector2.getSize()) {
-            Vector resultVector = new Vector(vector1.getSize());
-
-            for (int i = 0; i < vector2.getSize(); i++) {
-                resultVector.components[i] = vector1.components[i] + vector2.components[i];
-            }
-
-            for (int i = vector2.getSize(); i < vector1.getSize(); i++) {
-                resultVector.components[i] = vector1.components[i];
-            }
-
-            return resultVector;
-        } else {
-            Vector resultVector = new Vector(vector2.getSize());
-
-            for (int i = 0; i < vector1.getSize(); i++) {
-                resultVector.components[i] = vector1.components[i] + vector2.components[i];
-            }
-
-            for (int i = vector1.getSize(); i < vector2.getSize(); i++) {
-                resultVector.components[i] = vector2.components[i];
-            }
-
-            return resultVector;
-        }
+        Vector resultVector = new Vector(vector1);
+        resultVector.addVector(vector2);
+        return resultVector;
     }
 
     public static Vector getVectorDifference(Vector vector1, Vector vector2) {
-        if (vector1.getSize() >= vector2.getSize()) {
-            Vector resultVector = new Vector(vector1.getSize());
-
-            for (int i = 0; i < vector2.getSize(); i++) {
-                resultVector.components[i] = vector1.components[i] - vector2.components[i];
-            }
-
-            for (int i = vector2.getSize(); i < vector1.getSize(); i++) {
-                resultVector.components[i] = vector1.components[i];
-            }
-
-            return resultVector;
-        } else {
-            Vector resultVector = new Vector(vector2.getSize());
-
-            for (int i = 0; i < vector1.getSize(); i++) {
-                resultVector.components[i] = vector1.components[i] - vector2.components[i];
-            }
-
-            for (int i = vector1.getSize(); i < vector2.getSize(); i++) {
-                resultVector.components[i] = -vector2.components[i];
-            }
-
-            return resultVector;
-        }
+        Vector resultVector = new Vector(vector1);
+        resultVector.subtractVector(vector2);
+        return resultVector;
     }
 
     public static double getScalarProductOfVectors(Vector vector1, Vector vector2) {
