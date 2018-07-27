@@ -32,13 +32,13 @@ public class Triangle implements Shape {
         return 0.5 * Math.abs((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3));
     }
 
-    private double getSideLength(double x1, double y1, double x2, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
     }
 
     @Override
     public double getPerimeter() {
-        return this.getSideLength(x2, y2, x1, y1) + this.getSideLength(x2, y2, x3, y3) + this.getSideLength(x1, y1, x3, y3);
+        return Triangle.getSideLength(x2, y2, x1, y1) + Triangle.getSideLength(x2, y2, x3, y3) + Triangle.getSideLength(x1, y1, x3, y3);
     }
 
     @Override

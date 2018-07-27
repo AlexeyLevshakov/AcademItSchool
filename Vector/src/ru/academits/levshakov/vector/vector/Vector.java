@@ -63,7 +63,7 @@ public class Vector {
                 newComponents[i] = this.components[i] + vector.components[i];
             }
 
-            newComponents = Arrays.copyOfRange(vector.components, this.getSize(), vector.getSize() - 1);
+            System.arraycopy(vector.components, this.getSize(), newComponents, this.getSize(), vector.getSize() - this.getSize());
 
             this.components = newComponents;
         }
@@ -156,7 +156,7 @@ public class Vector {
         return resultVector;
     }
 
-    public static Vector getVectorDifference(Vector vector1, Vector vector2) {
+    public static Vector getVectorsDifference(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(vector1);
         resultVector.subtractVector(vector2);
         return resultVector;
