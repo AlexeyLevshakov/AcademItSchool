@@ -6,12 +6,11 @@ public class Range {
 
     public Range(double from, double to) {
         if (to < from) {
-            this.from = to;
-            this.to = from;
-        } else {
-            this.from = from;
-            this.to = to;
+            throw new IllegalArgumentException("Конец интревала должен быть больше либо равен началу.");
         }
+
+        this.from = from;
+        this.to = to;
     }
 
     public double getFrom() {
@@ -38,26 +37,83 @@ public class Range {
         return (enteredNumber >= from) && (enteredNumber <= to);
     }
 
-    public void print() {
-        if (this == null) {
-            System.out.println("null");
+    public static void print(Range range) {
+        if (range == null) {
+            System.out.print("null");
         } else {
-            System.out.println("(" + this.from + ", " + this.to + ")");
+            System.out.print("(" + range.from + ", " + range.to + ")");
         }
     }
 
+    public static void print(Range[] ranges) {
+        boolean printNull = true;
+
+        for (Range element : ranges) {
+            if (element != null) {
+                Range.print(element);
+                printNull = false;
+            }
+        }
+
+        if (printNull) {
+            System.out.print("Null");
+        }
+    }
+
+
     public Range getIntersection(Range range) {
-        if (this.from <= range.from && this.to >= range.getTo()) {
-            return new Range(range.getFrom(), range.getTo());
-        } else if (this.from >= range.getFrom() && this.to <= range.getTo()) {
+        if (range.from <= this.from && range.to >= this.from && range.to <= this.to) {
+            return new Range(this.from, range.to);
+        } else if (range.from >= this.from && range.to <= this.to) {
+            return new Range(range.from, range.to);
+        } else if (range.from <= this.from && range.to >= this.to) {
             return new Range(this.from, this.to);
-        } else if (range.getFrom() <= this.from && range.getTo() <= this.to) {
-            return new Range(this.from, range.getTo());
-        } else if (range.getFrom() >= this.from && range.getTo() >= this.to) {
-            return new Range(range.getFrom(), this.to);
+        } else if (range.from >= this.from && range.from <= this.to && range.to >= this.to) {
+            return new Range(range.from, this.to);
         } else {
             return null;
         }
+    }
+
+    public Range[] getUnion(Range range) {
+        Range[] intervalsUnion = new Range[2];
+
+        if (range.from <= this.from && range.to >= this.from && range.to <= this.to) {
+            intervalsUnion[0] = new Range(range.from, this.to);
+        } else if (range.from >= this.from && range.to <= this.to) {
+            intervalsUnion[0] = new Range(this.from, this.to);
+        } else if (range.from <= this.from && range.to >= this.to) {
+            intervalsUnion[0] = new Range(range.from, range.to);
+        } else if (range.from >= this.from && range.from <= this.to && range.to >= this.to) {
+            intervalsUnion[0] = new Range(this.from, range.to);
+        } else {
+            if (range.to < this.from) {
+                intervalsUnion[1] = this;
+                intervalsUnion[0] = range;
+            } else {
+                intervalsUnion[0] = this;
+                intervalsUnion[1] = range;
+            }
+        }
+
+        return intervalsUnion;
+    }
+
+    public Range[] getComplement(Range range) {
+        Range[] intervalsComplement = new Range[2];
+
+        if (range.from < this.from && range.to > this.from && range.to < this.to) {
+            intervalsComplement[0] = new Range(range.to, this.to);
+        } else if (range.from > this.from && range.to < this.to) {
+            intervalsComplement[0] = new Range(this.from, range.from);
+            intervalsComplement[1] = new Range(range.to, this.to);
+        } else if (range.from > this.from && range.from < this.to && range.to > this.to) {
+            intervalsComplement[0] = new Range(this.from, range.from);
+        } else if (range.to <= this.from || range.from >= this.to) {
+            intervalsComplement[0] = new Range(this.from, this.to);
+        }
+
+        return intervalsComplement;
     }
 }
 

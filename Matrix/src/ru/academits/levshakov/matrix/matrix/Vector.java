@@ -1,4 +1,4 @@
-package ru.academits.levshakov.vector.vector;
+package ru.academits.levshakov.matrix.matrix;
 
 import java.util.Arrays;
 
