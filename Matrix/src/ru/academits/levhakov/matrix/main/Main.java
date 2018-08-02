@@ -1,7 +1,7 @@
 package ru.academits.levhakov.matrix.main;
 
 import ru.academits.levshakov.matrix.matrix.Matrix;
-import ru.academits.levshakov.matrix.matrix.Vector;
+import ru.academits.levshakov.vector.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
@@ -76,19 +76,16 @@ public class Main {
         System.out.println(matrix4.multiplyByVectorColumn(vector));
 
         System.out.println();
-        System.out.println("Умножение матрицы на вектор-строку");
-        double[][] columnVectorArray = {{2}, {3}, {4}};
-        Matrix columnVectorMatrix = new Matrix(columnVectorArray);
-        columnVectorMatrix.multiplyByVectorRow(vector);
-        System.out.println(columnVectorMatrix);
-
-        System.out.println();
         System.out.println("Сложение");
+        System.out.println(matrix4);
+        System.out.println(matrix3);
         matrix4.addMatrix(matrix3);
         System.out.println(matrix4);
 
         System.out.println();
         System.out.println("Вычитание");
+        System.out.println(matrix4);
+        System.out.println(matrix3);
         matrix4.subtractMatrix(matrix3);
         System.out.println(matrix4);
 
@@ -111,8 +108,8 @@ public class Main {
         System.out.println();
         System.out.println("Статическое перемножение матриц");
 
-        double[][] newArray1 = {{-1, 1}, {2, 0}, {0, 3}};
-        double[][] newArray2 = {{3, 1, 2}, {0, -1, 4}};
+        double[][] newArray1 = {{2, 1}, {-3, 0}, {4, -1}};
+        double[][] newArray2 = {{5, -1, 6}, {-3, 0, 7}};
         Matrix newMatrix1 = new Matrix(newArray1);
         Matrix newMatrix2 = new Matrix(newArray2);
         System.out.println(newMatrix1);
