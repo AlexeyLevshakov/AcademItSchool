@@ -114,10 +114,7 @@ public class Matrix {
     public void transpose() {
         Vector[] newRows = new Vector[this.getColumnsNumber()];
         for (int i = 0; i < this.getColumnsNumber(); i++) {
-            newRows[i] = new Vector(this.getRowsNumber());
-            for (int j = 0; j < this.getRowsNumber(); j++) {
-                newRows[i].setComponentAtIndex(j, rows[j].getComponentAtIndex(i));
-            }
+            newRows[i] = new Vector(this.getColumnAtIndex(i));
         }
 
         this.rows = newRows;

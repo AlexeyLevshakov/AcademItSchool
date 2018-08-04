@@ -5,8 +5,8 @@ public class Range {
     private double to;
 
     public Range(double from, double to) {
-        if (to < from) {
-            throw new IllegalArgumentException("Конец интревала должен быть больше либо равен началу.");
+        if (to <= from) {
+            throw new IllegalArgumentException("Конец интревала должен быть больше начала");
         }
 
         this.from = from;
@@ -60,15 +60,14 @@ public class Range {
         }
     }
 
-
     public Range getIntersection(Range range) {
-        if (range.from <= this.from && range.to >= this.from && range.to <= this.to) {
+        if ((range.to > this.from && range.to < this.to && range.from <= this.from) || (range.to == this.to && range.from < this.from)) {
             return new Range(this.from, range.to);
         } else if (range.from >= this.from && range.to <= this.to) {
             return new Range(range.from, range.to);
-        } else if (range.from <= this.from && range.to >= this.to) {
+        } else if (range.from < this.from && range.to > this.to) {
             return new Range(this.from, this.to);
-        } else if (range.from >= this.from && range.from <= this.to && range.to >= this.to) {
+        } else if ((range.to >= this.to && range.from < this.to && range.from > this.from) || (range.from == this.from && range.to > this.to)) {
             return new Range(range.from, this.to);
         } else {
             return null;
@@ -78,18 +77,18 @@ public class Range {
     public Range[] getUnion(Range range) {
         Range[] intervalsUnion = new Range[2];
 
-        if (range.from <= this.from && range.to >= this.from && range.to <= this.to) {
+        if (range.from <= this.from && range.to >= this.from && range.to < this.to) {
             intervalsUnion[0] = new Range(range.from, this.to);
         } else if (range.from >= this.from && range.to <= this.to) {
             intervalsUnion[0] = new Range(this.from, this.to);
         } else if (range.from <= this.from && range.to >= this.to) {
             intervalsUnion[0] = new Range(range.from, range.to);
-        } else if (range.from >= this.from && range.from <= this.to && range.to >= this.to) {
+        } else if (range.from > this.from && range.from <= this.to && range.to >= this.to) {
             intervalsUnion[0] = new Range(this.from, range.to);
         } else {
             if (range.to < this.from) {
-                intervalsUnion[1] = this;
                 intervalsUnion[0] = range;
+                intervalsUnion[1] = this;
             } else {
                 intervalsUnion[0] = this;
                 intervalsUnion[1] = range;
@@ -102,17 +101,16 @@ public class Range {
     public Range[] getComplement(Range range) {
         Range[] intervalsComplement = new Range[2];
 
-        if (range.from < this.from && range.to > this.from && range.to < this.to) {
+        if (range.to <= this.from || range.from >= this.to) {
+            intervalsComplement[0] = new Range(this.from, this.to);
+        } else if (range.to > this.from && range.to < this.to && range.from <= this.from) {
             intervalsComplement[0] = new Range(range.to, this.to);
-        } else if (range.from > this.from && range.to < this.to) {
+        } else if (range.to < this.to && range.from > this.from) {
             intervalsComplement[0] = new Range(this.from, range.from);
             intervalsComplement[1] = new Range(range.to, this.to);
-        } else if (range.from > this.from && range.from < this.to && range.to > this.to) {
+        } else if (range.to >= this.to && range.from < this.to && range.from > this.from) {
             intervalsComplement[0] = new Range(this.from, range.from);
-        } else if (range.to <= this.from || range.from >= this.to) {
-            intervalsComplement[0] = new Range(this.from, this.to);
         }
-
         return intervalsComplement;
     }
 }
